@@ -1,0 +1,27 @@
+---
+title: "How This Site Works"
+slug: "how-this-site-works"
+summary: "A look at the static architecture, tech stack, and design decisions behind this public blog."
+published_at: "2026-04-13T00:00:00Z"
+tags: ["meta", "architecture"]
+visibility: "public"
+draft: false
+---
+
+This public blog is intentionally small. **Next.js** renders MDX posts into static files, and **GitHub Pages** serves those files directly. There is no login flow, API server, database, Redis cache, or runtime content authorization in this repository.
+
+## How Content Gets Published
+
+Blog posts are written in **MDX**: regular Markdown that can include React components when needed. They live alongside the code in Git, so publishing is just a pull request. No admin dashboard, no CMS, and no hidden database state.
+
+## Why Split It
+
+The public blog is split from the future platform work. That keeps the public site cheap, simple, and easy to inspect while the platform repository continues to evolve with authentication and richer product features.
+
+## Design Decisions
+
+- **Content as code.** Posts live in the repo. Every edit is tracked, reviewed, and rolled back the same way as a code change.
+- **Public means public.** The build fails if protected content is copied into this repository.
+- **No workstation installs.** Docker runs the Node toolchain for local checks.
+- **Host-portable.** GitHub Pages is the first host, with Cloudflare DNS or another static host still possible later.
+- **Small, reviewable changes.** Every pull request is kept focused — one feature or fix at a time — so nothing lands without clear intent.

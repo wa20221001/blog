@@ -1,0 +1,7 @@
+.git
+.next
+out
+node_modules
+.pnpm-store
+coverage
+*.log

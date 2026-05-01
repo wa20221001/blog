@@ -1,0 +1,9 @@
+.DS_Store
+.env*
+!.env.example
+.next/
+out/
+node_modules/
+.pnpm-store/
+coverage/
+*.log
