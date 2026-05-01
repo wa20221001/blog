@@ -1,0 +1,208 @@
+---
+title: "Setup for VS Code settings"
+slug: "editor-settings"
+summary: "VS Code settings"
+published_at: "2026-04-26T00:00:00Z"
+tags: ["code", "setup" , "copypaste", "snippet"]
+visibility: "public"
+draft: false
+---
+
+VScode settings:
+
+>Preferences: Open User Settings (JSON)
+
+```json
+{
+  "workbench.colorTheme": "Default High Contrast",
+  "telemetry.feedback.enabled": false,
+  "telemetry.telemetryLevel": "off",
+
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/out": true,
+    "**/.next": true,
+    "**/.nuxt": true,
+    "**/.svelte-kit": true,
+    "**/.turbo": true,
+    "**/.cache": true,
+    "**/.parcel-cache": true,
+    "**/.vite": true,
+    "**/coverage": true,
+
+    "**/.terraform": true,
+    "**/.terragrunt-cache": true,
+
+    "**/target": true,
+    "**/bin": true,
+    "**/obj": true,
+
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/.mypy_cache": true,
+    "**/.ruff_cache": true,
+    "**/.venv": true,
+    "**/venv": true
+  },
+
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/out": true,
+    "**/.next": true,
+    "**/.nuxt": true,
+    "**/.svelte-kit": true,
+    "**/.turbo": true,
+    "**/.cache": true,
+    "**/.parcel-cache": true,
+    "**/.vite": true,
+    "**/coverage": true,
+
+    "**/.terraform": true,
+    "**/.terragrunt-cache": true,
+    "**/terraform.tfstate": true,
+    "**/terraform.tfstate.backup": true,
+
+    "**/target": true,
+    "**/bin": true,
+    "**/obj": true,
+
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/.mypy_cache": true,
+    "**/.ruff_cache": true,
+    "**/.venv": true,
+    "**/venv": true,
+
+    "**/*.min.js": true,
+    "**/*.map": true,
+    "**/package-lock.json": true,
+    "**/yarn.lock": true,
+    "**/pnpm-lock.yaml": true
+  },
+
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/out/**": true,
+    "**/.next/**": true,
+    "**/.nuxt/**": true,
+    "**/.svelte-kit/**": true,
+    "**/.turbo/**": true,
+    "**/.cache/**": true,
+    "**/.parcel-cache/**": true,
+    "**/.vite/**": true,
+    "**/coverage/**": true,
+
+    "**/.terraform/**": true,
+    "**/.terragrunt-cache/**": true,
+
+    "**/target/**": true,
+    "**/bin/**": true,
+    "**/obj/**": true,
+
+    "**/__pycache__/**": true,
+    "**/.pytest_cache/**": true,
+    "**/.mypy_cache/**": true,
+    "**/.ruff_cache/**": true,
+    "**/.venv/**": true,
+    "**/venv/**": true
+  },
+
+  "typescript.tsserver.maxTsServerMemory": 4096,
+  "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+  "typescript.preferences.includePackageJsonAutoImports": "off",
+  "javascript.preferences.includePackageJsonAutoImports": "off",
+
+  "eslint.run": "onSave",
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+
+  "go.useLanguageServer": true,
+  "gopls": {
+    "build.directoryFilters": [
+      "-.git",
+      "-node_modules",
+      "-dist",
+      "-build",
+      "-vendor",
+      "-third_party",
+      "-testdata"
+    ],
+    "ui.diagnostic.analyses": {
+      "fieldalignment": false,
+      "shadow": false,
+      "unusedparams": true,
+      "unusedwrite": true
+    }
+  },
+
+  "python.analysis.exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+    "**/.pytest_cache",
+    "**/.mypy_cache",
+    "**/.ruff_cache",
+    "**/.venv",
+    "**/venv",
+    "**/dist",
+    "**/build"
+  ],
+  "python.analysis.autoImportCompletions": false,
+  "python.analysis.diagnosticMode": "openFilesOnly",
+
+  "git.autorefresh": false,
+  "git.openRepositoryInParentFolders": "never",
+  "git.autoRepositoryDetection": "subFolders",
+
+  "editor.minimap.enabled": false,
+  "editor.codeLens": false,
+  "editor.lightbulb.enabled": "off",
+  "breadcrumbs.enabled": false,
+
+  "window.restoreWindows": "none",
+  "workbench.startupEditor": "none"
+}
+```
+
+
+`opencode.json`
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "context7": {
+      "type": "local",
+      "command": ["docker", "run", "-i", "--rm", "mcp/context7"],
+      "enabled": true
+    },
+    "fetch": {
+      "type": "local",
+      "command": ["docker", "run", "-i", "--rm", "mcp/fetch"],
+      "enabled": true
+    },
+    "playwright": {
+      "type": "local",
+      "command": ["docker", "run", "-i", "--rm", "mcp/playwright"],
+      "enabled": true
+    }
+  }
+}
+```
