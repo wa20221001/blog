@@ -22,14 +22,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
           node-version: "24"
-          cache: pnpm
+
+      - name: Enable pnpm
+        run: corepack enable
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -38,7 +37,6 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-          cache: pip
 
       - name: Install resume PDF dependencies
         run: python -m pip install -r scripts/resume-pdf-requirements.txt
