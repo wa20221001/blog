@@ -40,7 +40,7 @@
     "jsdom": "^29.0.2",
     "markdownlint-cli2": "^0.22.0",
     "tailwindcss": "^4",
-    "typescript": "^5",
+    "typescript": "^6",
     "vitest": "^4.1.4"
   },
   "pnpm": {
