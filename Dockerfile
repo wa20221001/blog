@@ -1,5 +1,5 @@
 ARG NODE_IMAGE=cgr.dev/chainguard/node:latest-dev
-FROM ${NODE_IMAGE} AS verify
+FROM ${NODE_IMAGE} AS deps
 
 WORKDIR /workspace
 USER 65532
@@ -17,8 +17,11 @@ COPY --chown=65532:65532 src ./src
 COPY --chown=65532:65532 content ./content
 COPY --chown=65532:65532 public ./public
 COPY --chown=65532:65532 scripts ./scripts
+COPY --chown=65532:65532 AGENTS.md ./
 
 RUN pnpm install --frozen-lockfile
+
+FROM deps AS verify
 RUN pnpm test:ci
 RUN pnpm lint
 RUN pnpm build
