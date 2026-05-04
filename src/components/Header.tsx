@@ -12,7 +12,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-zinc-200 bg-zinc-50/95 backdrop-blur supports-[backdrop-filter]:bg-zinc-50/60 dark:border-zinc-800 dark:bg-black/95 dark:supports-[backdrop-filter]:bg-black/60">
       <div className="mx-auto grid h-14 w-full grid-cols-3 items-center px-6">
         <Link href="/" className="justify-self-start text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50">
-          Scott
+          {"Scott's Blog"}
         </Link>
         <Link
           href="/"
