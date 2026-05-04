@@ -18,11 +18,11 @@ export default function Header() {
           href="/"
           className="justify-self-center text-xl font-bold text-zinc-900 hover:opacity-80 dark:text-zinc-50"
         >
-          {language === "zh" ? "博客" : "Blog"}
+          Blog
         </Link>
         <nav className="flex items-center justify-end gap-4 text-sm font-medium text-zinc-600 dark:text-zinc-400">
           <Link href="/about" className="hover:text-zinc-900 dark:hover:text-zinc-50">
-            {language === "zh" ? "关于" : "About"}
+            {language === "zh" ? "关于我" : "About me"}
           </Link>
           <LanguageToggle />
           <ThemeToggle />
