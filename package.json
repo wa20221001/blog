@@ -46,6 +46,9 @@
   "pnpm": {
     "overrides": {
       "postcss": "8.5.10"
+    },
+    "patchedDependencies": {
+      "eslint-plugin-react@7.37.5": "patches/eslint-plugin-react@7.37.5.patch"
     }
   }
 }

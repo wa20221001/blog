@@ -18,6 +18,7 @@ COPY --chown=65532:65532 content ./content
 COPY --chown=65532:65532 public ./public
 COPY --chown=65532:65532 scripts ./scripts
 COPY --chown=65532:65532 AGENTS.md ./
+COPY --chown=65532:65532 patches ./patches
 
 RUN pnpm install --frozen-lockfile
 
