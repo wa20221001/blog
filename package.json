@@ -35,7 +35,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^6.0.1",
-    "eslint": "^9",
+    "eslint": "^10",
     "eslint-config-next": "16.2.4",
     "jsdom": "^29.1.1",
     "markdownlint-cli2": "^0.22.1",
@@ -46,6 +46,9 @@
   "pnpm": {
     "overrides": {
       "postcss": "8.5.10"
+    },
+    "patchedDependencies": {
+      "eslint-plugin-react@7.37.5": "patches/eslint-plugin-react@7.37.5.patch"
     }
   }
 }
