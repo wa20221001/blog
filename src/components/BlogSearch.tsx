@@ -21,6 +21,14 @@ export function BlogSearch({ posts }: BlogSearchProps) {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setQuery(tag);
   }, []);
+
+  useEffect(() => {
+    function handleClearSearch() {
+      setQuery("");
+    }
+    window.addEventListener("blog:clear-search", handleClearSearch);
+    return () => window.removeEventListener("blog:clear-search", handleClearSearch);
+  }, []);
   const trimmedQuery = query.trim();
   const hasQuery = trimmedQuery.length > 0;
   const visiblePosts = useMemo(() => searchPosts(posts, trimmedQuery), [posts, trimmedQuery]);
