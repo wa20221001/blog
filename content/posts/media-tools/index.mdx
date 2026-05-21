@@ -1,0 +1,251 @@
+---
+title: "media tools"
+slug: "media tools"
+summary: "Local Media Tools"
+published_at: "2026-05-06T00:00:00Z"
+tags: ["yt-dlp" ,"video", "github", "github actions", "gha"]
+visibility: "public"
+draft: false
+---
+
+This blogpost will go through the below topics for local or hosting methods using distroless/hardened images.
+- Archiving Online Media w/re-encoding
+- Pipeline to identifying common faces in Images and Videos and tagging tags/ reorganziing them
+- How to setup github actions to automatically build, smoke test
+
+Pre-requistes: Docker , probably want a decent iGPU or Macbook with M series or, better dGPU.
+OS: Unix (sorry powershell is too hard)
+
+
+# Archiving online media content for offline viewing through NAS 
+
+Installing hardened distroless images are safer with less attack surface whether it be in local machine or in a instance
+
+i.e. you want to have https://www.youtube.com/watch?v=tGXV-ZRwcUM locally 
+
+```Dockerfile
+# can add sha256
+FROM cgr.dev/chainguard/python:latest AS builder
+
+USER root
+RUN python -m venv /venv
+ENV PATH="/venv/bin:$PATH"
+RUN pip install --no-cache-dir yt-dlp
+
+ARG TARGETARCH
+WORKDIR /ffmpeg-build
+RUN ARCH=$(case "${TARGETARCH}" in \
+      amd64) echo "linux64" ;; \
+      arm64) echo "linuxarm64" ;; \
+      *) echo "Unsupported: ${TARGETARCH}" >&2; exit 1 ;; \
+    esac) && \
+    FFMPEG_BASENAME="ffmpeg-master-latest-${ARCH}-gpl" && \
+    echo "Downloading FFmpeg for ${TARGETARCH} (${ARCH})" && \
+    wget "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/${FFMPEG_BASENAME}.tar.xz" && \
+    wget "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/checksums.sha256" && \
+    grep "${FFMPEG_BASENAME}.tar.xz" checksums.sha256 | sha256sum -c && \
+    tar -xf "${FFMPEG_BASENAME}.tar.xz" && \
+    chmod +x "${FFMPEG_BASENAME}/bin/ffmpeg" "${FFMPEG_BASENAME}/bin/ffprobe" && \
+    ln -s "${FFMPEG_BASENAME}" ffmpeg-bundle
+
+FROM cgr.dev/chainguard/python:latest
+# can add sha256
+
+COPY --from=builder /venv /venv
+ENV PATH="/venv/bin:$PATH"
+
+COPY --from=builder /ffmpeg-build/ffmpeg-bundle/bin/ffmpeg /usr/local/bin/
+COPY --from=builder /ffmpeg-build/ffmpeg-bundle/bin/ffprobe /usr/local/bin/
+
+COPY --from=builder /etc/ssl/cert.pem /etc/ssl/cert.pem
+ENV SSL_CERT_FILE=/etc/ssl/cert.pem
+
+WORKDIR /downloads
+
+USER nonroot
+
+ENTRYPOINT ["yt-dlp"]
+```
+
+Now you can download:
+
+Video:
+
+```shell
+docker run --rm \
+  -v "$(pwd):/downloads" \
+  <your image> \
+  "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+```
+
+Audio:
+```shell
+docker run --rm -v "$(pwd):/downloads" <your image> -f bestaudio "URL"
+```
+
+ffmpeg also allows conversion to AV1 codec
+
+```shell
+docker run --rm \
+  -v "$(pwd):/downloads" \
+  <your image> \
+  -f "bestvideo*+bestaudio/best" \
+  --recode-video mkv \
+  --postprocessor-args "FFmpeg:-c:v libaom-av1 -crf 18 -cpu-used 8 -c:a copy" \
+  "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+```
+
+
+
+# Image Building:
+
+_build-images.yml
+
+```yml
+name: Build Image (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      image_name:
+        required: true
+        type: string
+        description: "Image name used for tags and metadata"
+      context:
+        required: true
+        type: string
+        description: "Docker build context path"
+      smoke_cmd:
+        required: false
+        type: string
+        default: "--version"
+        description: "Command to pass to the image entrypoint for smoke testing"
+      platforms:
+        required: false
+        type: string
+        default: "linux/amd64"
+        description: "Build target platforms (e.g. linux/amd64,linux/arm64)"
+      trivy_severity:
+        required: false
+        type: string
+        default: "CRITICAL,HIGH"
+        description: "CVSS severity levels that fail the build"
+
+permissions:
+  packages: write
+  id-token: write
+  attestations: write
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}/${{ inputs.image_name }}
+          tags: |
+            type=raw,value=latest
+            type=sha,prefix=sha-
+            type=raw,value={{date 'YYYY-MM-DD'}}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build for smoke test (amd64 only, local load)
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ inputs.context }}
+          platforms: linux/amd64
+          push: false
+          load: true
+          tags: smoke-test:${{ inputs.image_name }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Smoke test
+        run: |
+          docker run --rm smoke-test:${{ inputs.image_name }} ${{ inputs.smoke_cmd }}
+
+      - name: Build and push (multi-arch)
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ inputs.context }}
+          platforms: ${{ inputs.platforms }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          provenance: true
+          sbom: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Vulnerability scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ghcr.io/${{ github.repository }}/${{ inputs.image_name }}@${{ steps.build.outputs.digest }}
+          format: 'table'
+          exit-code: '1'
+          severity: ${{ inputs.trivy_severity }}
+          scanners: 'vuln'
+          vuln-type: 'os,library'
+
+      - name: Sign image
+        run: |
+          cosign sign --yes \
+            ghcr.io/${{ github.repository }}/${{ inputs.image_name }}@${{ steps.build.outputs.digest }}
+```
+
+
+With this reuseable workflow, we can consume this for yt-dlp:
+
+```yml
+name: Build yt-dlp
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'yt-dlp/**'
+      - '.github/workflows/build-yt-dlp.yml'
+      - '.github/workflows/_build-image.yml'
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  attestations: write
+
+jobs:
+  build:
+    uses: ./.github/workflows/_build-image.yml
+    with:
+      image_name: yt-dlp
+      context: yt-dlp
+      smoke_cmd: "--version"
+      platforms: linux/amd64,linux/arm64
+      trivy_severity: CRITICAL,HIGH
+```
+
