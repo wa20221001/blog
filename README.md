@@ -24,6 +24,8 @@ https://wa20221001.github.io/blog/
 
 Do not push or enable Pages until the generated static output has been manually inspected.
 
-## Cloudflare later
+## to do
 
 GitHub Pages is the first host. Cloudflare can be added later as DNS in front of GitHub Pages, or the static export can be moved to Cloudflare Pages/R2. If a custom domain serves this site at the domain root, update `next.config.ts` to remove the `/blog` `basePath` before publishing that domain.
+
+duplicate to Gitea
