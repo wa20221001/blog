@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getAllPosts } from "@/lib/content/posts";
 import { BlogHeader } from "@/components/BlogHeader";
 import { BlogSearch } from "@/components/BlogSearch";
+import TagCloud from "@/components/TagCloud";
 
 export const metadata: Metadata = {
   title: "Scott",
@@ -25,6 +26,7 @@ export default async function BlogIndexPage() {
     <div className="flex flex-col flex-1 items-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex w-full max-w-3xl flex-col gap-8 px-6 py-16">
         <BlogHeader />
+        <TagCloud />
         <BlogSearch posts={posts} />
       </main>
     </div>
