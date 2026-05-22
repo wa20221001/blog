@@ -12,9 +12,11 @@ Instructions for AI agents working on this repository.
 
 ## Commands
 
-All Node.js / pnpm commands MUST run inside a Chainguard Docker container. Do NOT run
-`pnpm`, `node`, `npm`, or `npx` on the host system. The two exceptions are `go` and
-the `gh` CLI.
+**NEVER run `pnpm`, `node`, `npm`, or `npx` on the host system.** All Node.js / pnpm
+commands MUST run inside a Chainguard Docker container. The two exceptions are `go`
+and the `gh` CLI.
+
+If Docker is not running, ask the user to start it. Do not fall back to host commands.
 
 The container image is `cgr.dev/chainguard/node:latest-dev` (defined in the
 Dockerfile). Build the `deps` stage first and tag it as `blog-dev`, then run
@@ -22,10 +24,10 @@ individual commands:
 
 ```bash
 docker build --target deps -t blog-dev .
-docker run --rm -v "$PWD/src:/workspace/src" -v "$PWD/content:/workspace/content" blog-dev pnpm lint
-docker run --rm -v "$PWD/src:/workspace/src" -v "$PWD/content:/workspace/content" blog-dev pnpm test:ci
-docker run --rm blog-dev pnpm typecheck
-docker run --rm blog-dev pnpm build
+docker run --rm --entrypoint "" -v "$PWD/src:/workspace/src" -v "$PWD/content:/workspace/content" blog-dev pnpm lint
+docker run --rm --entrypoint "" -v "$PWD/src:/workspace/src" -v "$PWD/content:/workspace/content" blog-dev pnpm test:ci
+docker run --rm --entrypoint "" blog-dev pnpm tsc --noEmit
+docker run --rm --entrypoint "" blog-dev pnpm build
 ```
 
 After making changes to source or config files, rebuild the dev image:
