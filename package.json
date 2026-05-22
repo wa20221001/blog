@@ -16,10 +16,10 @@
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
     "gray-matter": "^4.0.3",
-    "next": "16.2.4",
+    "next": "16.2.6",
     "next-mdx-remote": "^6.0.0",
-    "react": "19.2.5",
-    "react-dom": "19.2.5",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
     "rehype-pretty-code": "^0.14.3",
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.1",
@@ -31,17 +31,17 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
-    "@types/node": "^20",
+    "@types/node": "^25",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@vitejs/plugin-react": "^6.0.1",
+    "@vitejs/plugin-react": "^6.0.2",
     "eslint": "^10",
-    "eslint-config-next": "16.2.4",
+    "eslint-config-next": "16.2.6",
     "jsdom": "^29.1.1",
     "markdownlint-cli2": "^0.22.1",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^4.1.5"
+    "vitest": "^4.1.6"
   },
   "pnpm": {
     "overrides": {
