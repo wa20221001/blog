@@ -33,7 +33,7 @@ export default function PostContent({ post }: PostContentProps) {
               {post.frontmatter.tags.map((tag) => (
                 <Link
                   key={tag}
-                  href={`/#tag=${encodeURIComponent(tag)}`}
+                  href={`/blog/#tag=${encodeURIComponent(tag)}`}
                   className="rounded border border-zinc-300 bg-white px-1.5 py-0.5 text-xs text-zinc-500 transition hover:border-zinc-400 hover:text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:text-zinc-200"
                 >
                   {tag}
