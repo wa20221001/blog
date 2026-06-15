@@ -16,7 +16,7 @@
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
     "gray-matter": "^4.0.3",
-    "next": "16.2.7",
+    "next": "16.2.9",
     "next-mdx-remote": "^6.0.0",
     "react": "19.2.7",
     "react-dom": "19.2.7",
@@ -36,7 +36,7 @@
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^6.0.2",
     "eslint": "^10",
-    "eslint-config-next": "16.2.7",
+    "eslint-config-next": "16.2.9",
     "jsdom": "^29.1.1",
     "markdownlint-cli2": "^0.22.1",
     "tailwindcss": "^4",
