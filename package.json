@@ -41,7 +41,8 @@
     "markdownlint-cli2": "^0.22.1",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^4.1.8"
+    "vite": "8.0.16",
+    "vitest": "^4.1.9"
   },
   "pnpm": {
     "overrides": {
