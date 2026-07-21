@@ -14,7 +14,7 @@
     "verify:public": "node scripts/verify-public-content.mjs"
   },
   "dependencies": {
-    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/typography": "^0.5.20",
     "gray-matter": "^4.0.3",
     "next": "16.2.9",
     "next-mdx-remote": "^6.0.0",
