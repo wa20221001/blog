@@ -34,7 +34,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v7
         with:
-          node-version: "24"
+          node-version: "24.22.1"
 
       - name: Enable pnpm
         run: corepack enable
@@ -68,7 +68,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v7
         with:
-          node-version: "24"
+          node-version: "24.22.1"
 
       - name: Enable pnpm
         run: corepack enable
