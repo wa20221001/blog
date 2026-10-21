@@ -1,8 +1,12 @@
 ARG NODE_IMAGE=cgr.dev/chainguard/node:latest-dev
 FROM ${NODE_IMAGE} AS deps
 
-WORKDIR /workspace
+# Refresh the same Chainguard Node package before any dependency downloads.
+USER 0
+RUN apk add --no-cache --upgrade nodejs-26=26.12.1-r0
+
 USER 65532
+WORKDIR /workspace
 
 ENV CI=true
 ENV NEXT_TELEMETRY_DISABLED=1
